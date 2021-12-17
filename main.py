@@ -28,7 +28,7 @@ def get_location_coordinate(location_name):
 
 
 # 参考小文的
-def plot_geolines(plotting_data, geo_cities_coords, cord_name, plotting_data_1, geo_cities_coords_2, cord_name_2):
+def plot_geolines(plot_set, coords_set, name_set):
     # 设置画布的格式
     style = Style(title_pos="center",
                   width=1000,
@@ -50,29 +50,33 @@ def plot_geolines(plotting_data, geo_cities_coords, cord_name, plotting_data_1, 
 
     # 作图
     geolines = GeoLines('出行轨迹图', **style.init_style)
-    geolines.add(cord_name,
-                 plotting_data,
-                 maptype='china',  # 地图的类型，可以是省的地方，如'广东',也可以是地市，如'东莞'等等
-                 geo_cities_coords=geo_cities_coords,
-                 **style_geolines)
-    geolines.add(cord_name_2,
-                 plotting_data_1,
-                 maptype='china',
-                 geo_cities_coords=geo_cities_coords_2,
-                 **style_geolines)
+    for plot, coord, name in zip(plot_set, coords_set, name_set):
+        geolines.add(name,
+                     plot,
+                     maptype='china',  # 地图的类型，可以是省的地方，如'广东',也可以是地市，如'东莞'等等
+                     geo_cities_coords=coord,
+                     **style_geolines)
+
 
     # 发布，得到图形的html文件
     geolines.render('地理轨迹图.html')
 
 
 if __name__ == '__main__':
-    location_sets=[]
-    location_name_list_1 = ['长沙', '广西', '洪江', '潼南', '徐州']
-    location_name_list_2=['重庆','上海','西屯','清泉岗','新竹']
-    plot_data, cities_coords = set_data(location_name_list_1)
+    location_sets=[['长沙', '广西', '洪江', '潼南', '徐州'],['重庆','上海','西屯','清泉岗','新竹']]
+    plot_set=[]
+    coord_set=[]
+    cities_name_set=['陆军交辎学校','装甲兵教导总队']
+    #location_name_list_1 = ['长沙', '广西', '洪江', '潼南', '徐州']
+    #location_name_list_2=['重庆','上海','西屯','清泉岗','新竹']
+    #plot_data, cities_coords = set_data(location_name_list_1)
     # 绘制动态图
     #plot_geolines(plot_data, cities_coords, '陆军交辎学校')
-    plot_data_2, cities_coords_2 = set_data(location_name_list_2)
-    plot_geolines(plot_data, cities_coords,'陆军交辎学校', plot_data_2, cities_coords_2, '装甲兵教导总队')
+    #plot_data_2, cities_coords_2 = set_data(location_name_list_2)
+    for i in location_sets:
+        plot_data, cities_coords = set_data(i)
+        plot_set.append(plot_data)
+        coord_set.append(cities_coords)
+    plot_geolines(plot_set, coord_set, cities_name_set)
     print('ok，去浏览器看看吧')
 
