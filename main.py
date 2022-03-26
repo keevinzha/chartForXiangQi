@@ -1,10 +1,11 @@
 from urllib.request import urlopen, quote
 import json
+import numpy as np
 
 from pyecharts import GeoLines, Style
 
 #地图名称
-map_name=['海军','空军','陆军']
+map_name=['海军','空军','陆军','后勤']
 #这里填路线名称，每个名称一行
 cities_name_set=[['海军军士学校',
                  '海军军官学校',
@@ -18,33 +19,33 @@ cities_name_set=[['海军军士学校',
                  '陆军步兵学校',
                  '陆军炮兵学校',
                  '陆军大学',
-                 '国防医学院',
-                 '测绘学堂',
+                 '国防医学院'],
+                 ['测绘学堂',
                  '兵工学校（兵工工程学院）',
                  '联勤经理学校 联勤财务学校',
                  '中央警官学校',
                  '宪兵学校',
                  '副官学校']]
 #这里填路线，每个路线一行，用[]括起来，
-location_sets=[[['南京', '高雄'],
-               ['青岛','上海','青岛','厦门','高雄'],
-               ['上海','高雄','桃园市']],
-               [['南京','杭州','昆明','杭州','高雄'],
-               ['杭州','成都','高雄'],
-               ['南昌','成都','高雄'],
-               ['成都','南京','屏东','台北']],
-               [['广州','南京','成都','台北','高雄'],
-               ['长沙','广西','洪江','潼南','徐州','上海','西屯','台中清泉岗','新竹'],
-               ['南京','湖南','贵州省','高雄'],
-               ['南京','零陵','桂林','零陵','鹿寨','都匀','汤山','贵阳','沾益','高雄','台南四分子','永康'],
-               ['保定','北京','桃园县','八德'],
-               ['天津','北京','南京','广州','长沙','祁阳','桂林','图云关','贵州省','上海','台北'],
-               ['北京','花莲','桃园市'],
-               ['武汉','南京','株洲','重庆','汤山','吴淞','花莲','桃园市'],
-               ['上海','台北','新北','台北'],
-               ['南京','重庆','南京','台北','桃园市'],
-               ['广州','南京','常德','芷江','四川','重庆','新北','台北','新北','林口'],
-               ['南京','新北','台北']]]
+location_sets=[[['南京', '高雄左营'],
+               ['厦门','高雄左营'],
+               ['上海','高雄左营']],
+               [['杭州','高雄冈山'],
+               ['成都','高雄冈山'],
+               ['成都','高雄冈山'],
+               ['南京','屏东东港']],
+               [['成都','台北'],
+               ['上海','台中'],
+               ['贵州省','高雄县凤山镇'],
+               ['沾益','高雄县凤山镇'],
+               ['广州','桃园县'],
+               ['上海江湾','台北水源区']],
+               [['重庆','花莲'],
+               ['吴淞','花莲'],
+               ['漳州','台北'],
+               ['南京','台北'],
+               ['重庆','台北'],
+               ['南京','台北']]]
 
 
 
@@ -86,7 +87,7 @@ def plot_geolines(plot_set, coords_set, name_set, map_name):
                                geo_effect_symbolsize=0,  # 特效图形的大小
                                geo_effect_color='#7FFFD4',  # 特效的颜色
                                geo_effect_traillength=0.1,  # 特效图形的拖尾效果，0-1
-                               label_color=['#386cb0','#f0027f','#bf5b17'],
+                               label_color=['#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a','#ffff99'],
                                             #'#9933CC','#666699','#660066','#333366','#0066CC','#9900FF','#333399','#99CCFF','#9933FF','#330099','#6699FF','#9966CC','#3300CC','#003366','#330033','#3300FF'],
                                #label_color=['#FFA500', '#FFF68F'],  # 轨迹线的颜色，标签点的颜色，
                                border_color='#000000',  # 边界的颜色
@@ -119,10 +120,12 @@ if __name__ == '__main__':
     # 绘制动态图
     #plot_geolines(plot_data, cities_coords, '陆军交辎学校')
     #plot_data_2, cities_coords_2 = set_data(location_name_list_2)
-    for i in location_sets:
-        plot_data, cities_coords = set_data(i)
-        plot_set.append(plot_data)
-        coord_set.append(cities_coords)
-    plot_geolines(plot_set, coord_set, cities_name_set,map_name)
+    for j in range(4):
+        for i in location_sets[j]:
+            plot_data, cities_coords = set_data(i)
+            plot_set.append(plot_data)
+            coord_set.append(cities_coords)
+
+        plot_geolines(plot_set, coord_set, cities_name_set[j], map_name[j])
     print('ok，去浏览器看看吧')
 
